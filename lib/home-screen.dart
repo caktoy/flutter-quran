@@ -40,6 +40,35 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> showAbout(context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Quran Kita'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text('Created by: Thony Hermawan'),
+                  Text('\n'),
+                  Text(
+                      'Application source available on Github: https://github.com/caktoy/flutter-quran'),
+                  Text('\n'),
+                  Text(
+                      'Qur\'an source: https://github.com/rioastamal/quran-json'),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Tutup'))
+            ],
+          );
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +82,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                this.showAbout(context);
+              }),
+        ],
       ),
       body: _loading
           ? Center(
