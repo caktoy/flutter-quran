@@ -17,27 +17,108 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = false;
   List<Surah> _listSurah = List();
+  List<Surah> _listTemp = List();
+  int _totalSurah = 114;
+  double _percentage = 0;
+  TextEditingController _searchController = TextEditingController();
 
   void loadSurah() async {
     setState(() {
       _loading = true;
       _listSurah.clear();
+      _listTemp.clear();
+      _percentage = 0;
     });
 
-    List<Surah> temp = List();
-    for (var i = 1; i <= 114; i++) {
+    for (var i = 1; i <= _totalSurah; i++) {
       String raw =
           await rootBundle.loadString('assets/quran-json/surah/$i.json');
       var obj = json.decode(raw);
       var item = Surah.fromJson(obj['$i']);
 
-      temp.add(item);
+      setState(() {
+        _listTemp.add(item);
+        _percentage = (_listTemp.length / _totalSurah) * 100;
+      });
     }
 
     setState(() {
       _loading = false;
-      _listSurah.addAll(temp);
+      _listSurah.addAll(_listTemp);
     });
+  }
+
+  Widget renderBody() {
+    return Column(
+      children: [
+        Container(
+          child: new Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: new Card(
+              child: new ListTile(
+                title: new TextField(
+                  autofocus: false,
+                  autocorrect: false,
+                  controller: _searchController,
+                  decoration: new InputDecoration(
+                      hintText: 'Cari', border: InputBorder.none),
+                  onChanged: (value) {
+                    setState(() {
+                      _listTemp.clear();
+                      _listTemp.addAll(value.isNotEmpty
+                          ? _listSurah.where((surah) => surah.latin
+                              .toLowerCase()
+                              .contains(value.toLowerCase()))
+                          : _listSurah);
+                    });
+                  },
+                ),
+                trailing: new Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: _listTemp.length,
+            separatorBuilder: (BuildContext context, int index) => Divider(),
+            itemBuilder: (BuildContext ctx, int index) {
+              return ListTile(
+                title: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        '${_listTemp[index].number}. ${_listTemp[index].latin}'),
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(_listTemp[index].arabic),
+                    )
+                  ],
+                ),
+                subtitle: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_listTemp[index].name),
+                    Text('${_listTemp[index].totalAyah} Ayat')
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext c) =>
+                            DetailScreen(surah: _listTemp[index]),
+                      ));
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> showAbout(context) async {
@@ -95,43 +176,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _loading
           ? Center(
-              child: Text('Sedang memuat konten...'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${_percentage.round()}%',
+                    style: TextStyle(fontSize: 35),
+                  ),
+                  Text('Sedang menyusun konten'),
+                  Text('Mohon tunggu sebentar...'),
+                ],
+              ),
             )
-          : ListView.separated(
-              itemCount: _listSurah.length,
-              separatorBuilder: (BuildContext context, int index) => Divider(),
-              itemBuilder: (BuildContext ctx, int index) {
-                return ListTile(
-                  title: Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${index + 1}. ${_listSurah[index].latin}'),
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Text(_listSurah[index].arabic),
-                      )
-                    ],
-                  ),
-                  subtitle: Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(_listSurah[index].name),
-                      Text('${_listSurah[index].totalAyah} Ayat')
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext c) =>
-                              DetailScreen(surah: _listSurah[index]),
-                        ));
-                  },
-                );
-              },
-            ),
+          : renderBody(),
     );
   }
 }

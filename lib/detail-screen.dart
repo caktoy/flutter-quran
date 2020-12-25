@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 import './models/Ayah.dart';
@@ -74,6 +75,9 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Flex(
           direction: Axis.vertical,
+          crossAxisAlignment: Platform.isAndroid
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.center,
           children: [
             Text('${widget.surah.latin} (${widget.surah.arabic})'),
             Text(
