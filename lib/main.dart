@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quran Kita',
+      title: 'Quran ID',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeScreen(title: 'Quran Kita'),
+        '/': (context) => HomeScreen(title: 'Quran ID'),
         '/detail': (context) => DetailScreen()
       },
     );
