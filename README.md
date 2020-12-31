@@ -6,6 +6,6 @@ The content of this application is referred to the repository [quran-json](https
 
 To Do:
 
-- [ ] Async loading content
 - [ ] Dark mode
-- [ ] Go to spesific ayah
+- [ ] Bookmark and go to spesific ayah
+- [ ] Mark last seen surah and ayah

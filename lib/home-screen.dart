@@ -127,11 +127,11 @@ class _HomeScreenState extends State<HomeScreen> {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Quran Kita'),
+            title: Text('Quran ID'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: [
-                  Text('Created by: Thony Hermawan'),
+                  Text('Developed by: Thony Hermawan'),
                   Text('\n'),
                   Text(
                       'Application source available on Github: https://github.com/caktoy/flutter-quran'),

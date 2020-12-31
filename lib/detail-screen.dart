@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import './models/Ayah.dart';
 import './models/Surah.dart';
@@ -23,7 +24,7 @@ class _DetailScreenState extends State<DetailScreen> {
       _listAyah.clear();
     });
 
-    List<Ayah> temp = List();
+    List<Ayah> temp = [];
     for (var i = 0; i < widget.surah.totalAyah; i++) {
       var ayah = new Ayah();
       ayah.index = i + 1;
@@ -75,9 +76,11 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Flex(
           direction: Axis.vertical,
-          crossAxisAlignment: Platform.isAndroid
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.center,
+          crossAxisAlignment: kIsWeb
+              ? CrossAxisAlignment.center
+              : (Platform.isAndroid
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center),
           children: [
             Text('${widget.surah.latin} (${widget.surah.arabic})'),
             Text(
