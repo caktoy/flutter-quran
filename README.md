@@ -9,3 +9,4 @@ To Do:
 - [ ] Dark mode
 - [ ] Bookmark and go to spesific ayah
 - [ ] Mark last seen surah and ayah
+- [ ] Audio murotai
