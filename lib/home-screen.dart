@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:simple_quran/detail-screen.dart';
 
+import 'package:package_info/package_info.dart';
+
 import './models/Surah.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,8 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = false;
-  List<Surah> _listSurah = List();
-  List<Surah> _listTemp = List();
+  List<Surah> _listSurah = [];
+  List<Surah> _listTemp = [];
   int _totalSurah = 114;
   double _percentage = 0;
   TextEditingController _searchController = TextEditingController();
@@ -93,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         '${_listTemp[index].number}. ${_listTemp[index].latin}'),
                     Directionality(
                       textDirection: TextDirection.rtl,
-                      child: Text(_listTemp[index].arabic),
+                      child: Text(_listTemp[index].arabic,
+                          style: TextStyle(fontFamily: "LPMQ")),
                     )
                   ],
                 ),
@@ -122,6 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> showAbout(context) async {
+    var packageInfo = await PackageInfo.fromPlatform();
+
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -138,6 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('\n'),
                   Text(
                       'Qur\'an source: https://github.com/rioastamal/quran-json'),
+                  Text('\n'),
+                  Text(
+                    'Version: ${packageInfo.version}',
+                    style: TextStyle(fontSize: 12.0),
+                  ),
                 ],
               ),
             ),
@@ -167,11 +177,13 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
               icon: Icon(
                 Icons.info,
-                color: Colors.white,
+                color: _loading ? Colors.transparent : Colors.white,
               ),
-              onPressed: () {
-                this.showAbout(context);
-              }),
+              onPressed: _loading
+                  ? () {}
+                  : () {
+                      this.showAbout(context);
+                    }),
         ],
       ),
       body: _loading
