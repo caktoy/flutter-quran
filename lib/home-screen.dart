@@ -10,7 +10,7 @@ import './models/Surah.dart';
 class HomeScreen extends StatefulWidget {
   final String title;
 
-  HomeScreen({Key key, this.title}) : super(key: key);
+  HomeScreen({Key? key, required this.title}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

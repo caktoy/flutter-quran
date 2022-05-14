@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 
 import './models/Ayah.dart';
 import './models/Surah.dart';
@@ -8,7 +9,7 @@ import './models/Surah.dart';
 class DetailScreen extends StatefulWidget {
   final Surah surah;
 
-  DetailScreen({Key key, this.surah}) : super(key: key);
+  DetailScreen({Key? key, required this.surah}) : super(key: key);
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -16,7 +17,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   bool _loading = false;
-  List<Ayah> _listAyah = List();
+  List<Ayah> _listAyah = <Ayah>[];
 
   void mapAyah() {
     setState(() {
@@ -26,11 +27,12 @@ class _DetailScreenState extends State<DetailScreen> {
 
     List<Ayah> temp = [];
     for (var i = 0; i < widget.surah.totalAyah; i++) {
-      var ayah = new Ayah();
-      ayah.index = i + 1;
-      ayah.arabic = widget.surah.ayah['${i + 1}'];
-      ayah.indonesia = widget.surah.translation['${i + 1}'];
-      ayah.tafsir = widget.surah.tafsir['${i + 1}'];
+      var ayah = new Ayah(
+        index: i + 1,
+        arabic: widget.surah.ayah['${i + 1}'],
+        indonesia: widget.surah.translation['${i + 1}'],
+        tafsir: widget.surah.tafsir['${i + 1}'],
+      );
       temp.add(ayah);
     }
 
@@ -61,6 +63,15 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
           );
         });
+  }
+
+  void _copyToClipboard(int index) {
+    String text = _listAyah[index].arabic + '\n\n' + _listAyah[index].indonesia;
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Ayat ${_listAyah[index].index} telah disalin'),
+      duration: Duration(seconds: 1),
+    ));
   }
 
   @override
@@ -109,12 +120,32 @@ class _DetailScreenState extends State<DetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
+                        Container(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 6.0, vertical: 4.0),
-                          child: Text(
-                            '${index + 1}.',
-                            style: TextStyle(fontSize: 18),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${index + 1}',
+                                style:
+                                    TextStyle(fontSize: 18, fontFamily: "LPMQ"),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  this.showTafsir(context, index);
+                                },
+                                child: Icon(Icons.info_outline_rounded,
+                                    color: Colors.grey.shade600, size: 18),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  this._copyToClipboard(index);
+                                },
+                                child: Icon(Icons.copy_rounded,
+                                    color: Colors.grey.shade600, size: 18),
+                              ),
+                            ],
                           ),
                         ),
                         Expanded(

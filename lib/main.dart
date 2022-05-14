@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(title: 'Quran ID'),
-        '/detail': (context) => DetailScreen()
+        // '/detail': (context) => DetailScreen()
       },
     );
   }

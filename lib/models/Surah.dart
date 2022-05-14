@@ -9,14 +9,14 @@ class Surah {
   Map<String, dynamic> tafsir;
 
   Surah(
-      {this.number,
-      this.arabic,
-      this.name,
-      this.latin,
-      this.totalAyah,
-      this.ayah,
-      this.translation,
-      this.tafsir});
+      {required this.number,
+      required this.arabic,
+      required this.name,
+      required this.latin,
+      required this.totalAyah,
+      required this.ayah,
+      required this.translation,
+      required this.tafsir});
 
   factory Surah.fromJson(Map<String, dynamic> json) {
     return Surah(
