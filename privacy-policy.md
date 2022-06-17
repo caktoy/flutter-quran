@@ -1,6 +1,6 @@
 <h1>Privacy Policy for Quran ID</h1>
 
-<p>At Quran ID, accessible from [https://github.com/caktoy/flutter-quran](https://play.google.com/store/apps/details?id=io.github.caktoy.QuranID), one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Quran ID and how we use it.</p>
+<p>At Quran ID, accessible from https://play.google.com/store/apps/details?id=io.github.caktoy.QuranID, one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Quran ID and how we use it.</p>
 
 <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</p>
 
