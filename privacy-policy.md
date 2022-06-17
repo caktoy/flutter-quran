@@ -1,12 +1,12 @@
 <h1>Privacy Policy for Quran ID</h1>
 
-<p>At Quran ID, accessible from https://github.com/caktoy/flutter-quran, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Quran ID and how we use it.</p>
+<p>At Quran ID, accessible from [https://github.com/caktoy/flutter-quran](https://play.google.com/store/apps/details?id=io.github.caktoy.QuranID), one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Quran ID and how we use it.</p>
 
 <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</p>
 
 <h2>Log Files</h2>
 
-<p>Quran ID follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information. Our Privacy Policy was created with the help of the <a href="https://www.privacypolicyonline.com/privacy-policy-generator/">Privacy Policy Generator</a>.</p>
+<p>Quran ID follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the application.</p>
 
 
 
@@ -37,4 +37,4 @@
 
 <h2>Consent</h2>
 
-<p>By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
+<p>By using our application, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.</p>
