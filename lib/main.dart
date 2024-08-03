@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:simple_quran/setting-screen.dart';
 import './home-screen.dart';
-import './detail-screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(title: 'Quran ID'),
+        '/setting': (context) => SettingScreen(),
         // '/detail': (context) => DetailScreen()
       },
     );

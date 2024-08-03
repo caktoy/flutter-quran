@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_quran/detail-screen.dart';
-
-import 'package:package_info/package_info.dart';
 
 import './models/Surah.dart';
 
@@ -23,8 +22,28 @@ class _HomeScreenState extends State<HomeScreen> {
   int _totalSurah = 114;
   double _percentage = 0;
   TextEditingController _searchController = TextEditingController();
+  String _lastSavedSurah = '';
+  int _lastSavedAyah = 0;
 
-  void loadSurah() async {
+  // load last saved surah and ayah from shared preference
+  void _loadLastRead() {
+    try {
+      SharedPreferences.getInstance().then((prefs) {
+        setState(() {
+          _lastSavedSurah = prefs.getString('last_surah') ?? '';
+          _lastSavedAyah = prefs.getInt('last_ayah') ?? 0;
+        });
+      });
+    } catch (e) {
+      // show error as snackbar
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Gagal memuat data terakhir dibaca'),
+        duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  void _loadSurah() async {
     setState(() {
       _loading = true;
       _listSurah.clear();
@@ -42,6 +61,27 @@ class _HomeScreenState extends State<HomeScreen> {
         _listTemp.add(item);
         _percentage = (_listTemp.length / _totalSurah) * 100;
       });
+    }
+
+    // load last saved surah and ayah from shared preference, if any put it on top of the list without removing the original list
+    if (_lastSavedSurah.isNotEmpty) {
+      var lastSurah = _listTemp.firstWhere(
+          (element) => element.latin == _lastSavedSurah,
+          orElse: () => Surah(
+              number: 0,
+              name: '',
+              latin: '',
+              arabic: '',
+              totalAyah: 0,
+              translation: {},
+              tafsir: {},
+              ayah: {}));
+      if (lastSurah.number > 0) {
+        lastSurah.latin =
+            "${lastSurah.latin} (Terakhir dibaca pada ayat ke-$_lastSavedAyah)";
+        // _listTemp.removeWhere((element) => element.latin == _lastSavedSurah);
+        _listTemp.insert(0, lastSurah);
+      }
     }
 
     setState(() {
@@ -114,7 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(
                         builder: (BuildContext c) =>
                             DetailScreen(surah: _listTemp[index]),
-                      ));
+                      )).then((value) {
+                    this._loadLastRead();
+                    this._loadSurah();
+                  });
                 },
               );
             },
@@ -124,47 +167,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> showAbout(context) async {
-    var packageInfo = await PackageInfo.fromPlatform();
-
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Quran ID'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Text('Developed by: Thony Hermawan'),
-                  Text('\n'),
-                  Text(
-                      'Application source available on Github: https://github.com/caktoy/flutter-quran'),
-                  Text('\n'),
-                  Text(
-                      'Qur\'an source: https://github.com/rioastamal/quran-json'),
-                  Text('\n'),
-                  Text(
-                    'Version: ${packageInfo.version}',
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Tutup'))
-            ],
-          );
-        });
-  }
-
   @override
   void initState() {
     super.initState();
 
-    this.loadSurah();
+    this._loadLastRead();
+
+    this._loadSurah();
   }
 
   @override
@@ -174,16 +183,13 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title: Text(widget.title),
         actions: [
+          // icon button for navigate to setting screen
           IconButton(
-              icon: Icon(
-                Icons.info,
-                color: _loading ? Colors.transparent : Colors.white,
-              ),
-              onPressed: _loading
-                  ? () {}
-                  : () {
-                      this.showAbout(context);
-                    }),
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/setting');
+            },
+          ),
         ],
       ),
       body: _loading
